@@ -13,9 +13,14 @@ object CoreLinkCallSession {
     private var audio: AudioCallService? = null
 
     @Volatile
-    private var state = CallSessionState()
+    var state = CallSessionState()
+        private set
+
+    @Volatile
+    private var appContext: Context? = null
 
     fun init(context: Context) {
+        appContext = context.applicationContext
         if (audio == null) {
             audio = AudioCallService(context.applicationContext)
         }
@@ -80,6 +85,7 @@ object CoreLinkCallSession {
     private fun updateState(phase: CallPhase, peerName: String?, startedAt: Long?) {
         state = CallSessionState(phase, peerName, startedAt)
         listeners.forEach { it(state) }
+        appContext?.let { CoreLinkForegroundService.updateServiceState(it) }
     }
 }
 

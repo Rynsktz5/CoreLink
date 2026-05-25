@@ -7,7 +7,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.animation.OvershootInterpolator
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,7 +36,7 @@ class EmergencyActivity : AppCompatActivity() {
         alertStatus = findViewById(R.id.alertStatus)
         locationText = findViewById(R.id.locationText)
 
-        findViewById<ImageButton>(R.id.themeToggleButton).setOnClickListener {
+        findViewById<MaterialButton>(R.id.themeToggleButton).setOnClickListener {
             ThemePrefs.toggle(this)
             recreate()
         }

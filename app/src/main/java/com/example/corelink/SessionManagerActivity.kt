@@ -2,7 +2,6 @@ package com.example.corelink
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
@@ -39,7 +38,7 @@ class SessionManagerActivity : AppCompatActivity() {
             ChatHistoryStore.clear(this)
             updateHistoryCount()
         }
-        findViewById<ImageButton>(R.id.themeToggleButton).setOnClickListener {
+        findViewById<MaterialButton>(R.id.themeToggleButton).setOnClickListener {
             ThemePrefs.toggle(this)
             recreate()
         }

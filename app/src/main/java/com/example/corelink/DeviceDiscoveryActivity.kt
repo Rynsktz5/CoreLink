@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,10 +25,12 @@ import com.google.android.material.button.MaterialButton
 class DeviceDiscoveryActivity : AppCompatActivity() {
 
     private lateinit var statusText: TextView
-    private lateinit var scanPulse: View
+    private lateinit var scanPulse1: View
+    private lateinit var scanPulse2: View
     private lateinit var scanButton: MaterialButton
-    private lateinit var themeToggleButton: ImageButton
+    private lateinit var themeToggleButton: MaterialButton
     private lateinit var recyclerView: RecyclerView
+    private lateinit var systemPairButton: MaterialButton
 
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private val devices = linkedMapOf<String, DeviceItem>()
@@ -62,7 +63,7 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
                 }
 
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-                    statusText.text = getString(R.string.scan_status_finished, devices.size)
+                    statusText.text = "Scan finished. Found ${devices.size} hosted rooms."
                     stopPulse()
                 }
 
@@ -74,7 +75,52 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     }
 
-                    device?.let { addDevice(it, getString(R.string.device_state_discovered)) }
+                    device?.let {
+                        try {
+                            it.fetchUuidsWithSdp()
+                        } catch (_: SecurityException) {
+                        }
+                    }
+                }
+
+                BluetoothDevice.ACTION_UUID -> {
+                    val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    }
+                    val uuids = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID)
+                    if (device != null && uuids != null) {
+                        val hasCoreLink = uuids.any { uuid ->
+                            uuid.toString().equals("00001101-0000-1000-8000-00805F9B34FB", ignoreCase = true)
+                        }
+                        if (hasCoreLink) {
+                            val isPaired = device.bondState == BluetoothDevice.BOND_BONDED
+                            val stateLabel = if (isPaired) "Paired" else "Discovered"
+                            addDevice(device, stateLabel, isPaired)
+                            statusText.text = "Found ${devices.size} hosted room(s)"
+                        }
+                    }
+                }
+
+                BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
+                    val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    }
+                    val bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE)
+                    if (device != null) {
+                        if (bondState == BluetoothDevice.BOND_BONDED) {
+                            Toast.makeText(context, "${device.name ?: "Device"} paired successfully!", Toast.LENGTH_SHORT).show()
+                            addDevice(device, "Paired", true)
+                            showConnectOptions(device)
+                        } else if (bondState == BluetoothDevice.BOND_NONE) {
+                            addDevice(device, "Discovered", false)
+                        }
+                    }
                 }
             }
         }
@@ -86,25 +132,37 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_device_discovery)
 
         statusText = findViewById(R.id.deviceScanStatus)
-        scanPulse = findViewById(R.id.scanPulse)
+        scanPulse1 = findViewById(R.id.scanPulse1)
+        scanPulse2 = findViewById(R.id.scanPulse2)
         scanButton = findViewById(R.id.scanButton)
         themeToggleButton = findViewById(R.id.themeToggleButton)
         recyclerView = findViewById(R.id.deviceRecycler)
+        systemPairButton = findViewById(R.id.systemPairButton)
 
-        adapter = DeviceScanAdapter(mutableListOf()) { device ->
-            val bluetooth = bluetoothAdapter ?: return@DeviceScanAdapter
-            val target = try {
-                bluetooth.bondedDevices.firstOrNull { it.address == device.address }
-            } catch (_: SecurityException) {
-                null
+        adapter = DeviceScanAdapter(
+            devices = mutableListOf(),
+            onPairClick = { item ->
+                val bluetooth = bluetoothAdapter ?: return@DeviceScanAdapter
+                try {
+                    val remoteDevice = bluetooth.getRemoteDevice(item.address)
+                    Toast.makeText(this, "Pairing with ${item.name}...", Toast.LENGTH_SHORT).show()
+                    remoteDevice.createBond()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Pairing failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onTap = { item ->
+                val bluetooth = bluetoothAdapter ?: return@DeviceScanAdapter
+                try {
+                    val remoteDevice = bluetooth.getRemoteDevice(item.address)
+                    if (remoteDevice.bondState == BluetoothDevice.BOND_BONDED) {
+                        showConnectOptions(remoteDevice)
+                    } else {
+                        Toast.makeText(this, "Please pair with this device first.", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (_: Exception) {}
             }
-
-            if (target == null) {
-                Toast.makeText(this, R.string.device_connect_pair_first, Toast.LENGTH_SHORT).show()
-                return@DeviceScanAdapter
-            }
-            showConnectOptions(target)
-        }
+        )
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -119,6 +177,15 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
                 startDiscoveryFlow()
             } else {
                 permissionLauncher.launch(requiredPermissions())
+            }
+        }
+
+        systemPairButton.setOnClickListener {
+            try {
+                val intent = Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Could not open Bluetooth settings", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -150,28 +217,34 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
 
         loadPairedDevices()
         stopDiscovery()
-        adapter.startDiscovery()
+        try {
+            adapter.startDiscovery()
+        } catch (_: SecurityException) {
+        }
     }
 
     private fun loadPairedDevices() {
         val bluetooth = bluetoothAdapter ?: return
         devices.clear()
+        adapter.replace(emptyList())
+        
         val paired = try {
             bluetooth.bondedDevices.toList()
         } catch (_: SecurityException) {
             emptyList()
         }
 
-        paired.forEach { addDevice(it, getString(R.string.device_state_paired), refresh = false) }
-        adapter.replace(devices.values.toList())
-        statusText.text = if (paired.isEmpty()) {
-            getString(R.string.scan_status_idle)
-        } else {
-            getString(R.string.scan_status_paired, paired.size)
+        paired.forEach { device ->
+            try {
+                device.fetchUuidsWithSdp()
+            } catch (_: SecurityException) {
+            }
         }
+        
+        statusText.text = "Checking paired devices for hosted rooms..."
     }
 
-    private fun addDevice(device: BluetoothDevice, state: String, refresh: Boolean = true) {
+    private fun addDevice(device: BluetoothDevice, state: String, isPaired: Boolean, refresh: Boolean = true) {
         val name = try {
             device.name ?: getString(R.string.unknown_device)
         } catch (_: SecurityException) {
@@ -181,7 +254,8 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
         devices[device.address] = DeviceItem(
             name = name,
             address = device.address,
-            state = state
+            state = state,
+            isPaired = isPaired
         )
 
         if (refresh) {
@@ -195,6 +269,8 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
             addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
             addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
             addAction(BluetoothDevice.ACTION_FOUND)
+            addAction(BluetoothDevice.ACTION_UUID)
+            addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         }
         registerReceiver(discoveryReceiver, filter)
         receiverRegistered = true
@@ -216,22 +292,43 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
 
     private fun startPulse() {
         if (pulseAnimators.any { it.isRunning }) return
-        pulseAnimators += ObjectAnimator.ofFloat(scanPulse, "scaleX", 1f, 1.16f).apply {
-            duration = 900
-            repeatMode = ObjectAnimator.REVERSE
+        
+        pulseAnimators += ObjectAnimator.ofFloat(scanPulse1, "scaleX", 1f, 3.5f).apply {
+            duration = 2000
             repeatCount = ObjectAnimator.INFINITE
             interpolator = AccelerateDecelerateInterpolator()
             start()
         }
-        pulseAnimators += ObjectAnimator.ofFloat(scanPulse, "scaleY", 1f, 1.16f).apply {
-            duration = 900
-            repeatMode = ObjectAnimator.REVERSE
+        pulseAnimators += ObjectAnimator.ofFloat(scanPulse1, "scaleY", 1f, 3.5f).apply {
+            duration = 2000
             repeatCount = ObjectAnimator.INFINITE
             interpolator = AccelerateDecelerateInterpolator()
             start()
         }
-        pulseAnimators += ObjectAnimator.ofFloat(scanPulse, "rotation", 0f, 180f, 360f).apply {
-            duration = 2200
+        pulseAnimators += ObjectAnimator.ofFloat(scanPulse1, "alpha", 1f, 0f).apply {
+            duration = 2000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+
+        pulseAnimators += ObjectAnimator.ofFloat(scanPulse2, "scaleX", 1f, 3.5f).apply {
+            duration = 2000
+            startDelay = 1000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+        pulseAnimators += ObjectAnimator.ofFloat(scanPulse2, "scaleY", 1f, 3.5f).apply {
+            duration = 2000
+            startDelay = 1000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+        pulseAnimators += ObjectAnimator.ofFloat(scanPulse2, "alpha", 1f, 0f).apply {
+            duration = 2000
+            startDelay = 1000
             repeatCount = ObjectAnimator.INFINITE
             interpolator = AccelerateDecelerateInterpolator()
             start()
@@ -241,9 +338,12 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
     private fun stopPulse() {
         pulseAnimators.forEach { it.cancel() }
         pulseAnimators.clear()
-        scanPulse.scaleX = 1f
-        scanPulse.scaleY = 1f
-        scanPulse.rotation = 0f
+        scanPulse1.scaleX = 1f
+        scanPulse1.scaleY = 1f
+        scanPulse1.alpha = 0f
+        scanPulse2.scaleX = 1f
+        scanPulse2.scaleY = 1f
+        scanPulse2.alpha = 0f
     }
 
     private fun hasBluetoothPermissions(): Boolean {
@@ -297,6 +397,8 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
             onConnected = { name ->
                 runOnUiThread {
                     statusText.text = getString(R.string.scan_connected_status, name)
+                    startActivity(Intent(this@DeviceDiscoveryActivity, ChatActivity::class.java))
+                    finish()
                 }
             },
             onError = { error ->
@@ -324,6 +426,8 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
             onConnected = { name ->
                 runOnUiThread {
                     statusText.text = getString(R.string.scan_connected_status, name)
+                    startActivity(Intent(this@DeviceDiscoveryActivity, ChatActivity::class.java))
+                    finish()
                 }
             },
             onError = { error ->
@@ -339,6 +443,9 @@ class DeviceDiscoveryActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissions += Manifest.permission.BLUETOOTH_SCAN
             permissions += Manifest.permission.BLUETOOTH_CONNECT
+        } else {
+            permissions += Manifest.permission.ACCESS_FINE_LOCATION
+            permissions += Manifest.permission.ACCESS_COARSE_LOCATION
         }
         return permissions.toTypedArray()
     }

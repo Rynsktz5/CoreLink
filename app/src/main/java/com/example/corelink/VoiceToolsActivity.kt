@@ -8,7 +8,6 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,7 +21,7 @@ class VoiceToolsActivity : AppCompatActivity() {
 
     private lateinit var transcriptText: TextView
     private lateinit var recordStatus: TextView
-    private lateinit var themeToggleButton: ImageButton
+    private lateinit var themeToggleButton: MaterialButton
     private lateinit var pulseView: android.view.View
 
     private var recorder: MediaRecorder? = null
@@ -175,7 +174,7 @@ class VoiceToolsActivity : AppCompatActivity() {
             return
         }
 
-        if (CoreLinkSession.sendVoiceNote(file)) {
+        if (CoreLinkSession.sendVoiceNote(file) != null) {
             recordStatus.text = getString(R.string.voice_note_sent)
         } else {
             showToast(R.string.voice_note_send_failed)
