@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="surface">#FF0F1722</color>
+    <color name="surfaceElevated">#FF16202D</color>
+    <color name="surfaceMuted">#FF233142</color>
+    <color name="accent">#7CB4FF</color>
+    <color name="accentSoft">#FF20314A</color>
+    <color name="accentDark">#4D86D9</color>
+    <color name="alert">#FF7B72</color>
+    <color name="callSurface">#FF211D1A</color>
+    <color name="callStroke">#FF3B322C</color>
+    <color name="borderSoft">#FF2B3A4D</color>
+    <color name="textPrimary">#FFF5F8FC</color>
+    <color name="textSecondary">#FFB3C0D0</color>
+    <color name="textMuted">#FF8B9AB0</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

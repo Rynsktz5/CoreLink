@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Corelink" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryVariant">@color/accentDark</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSurface">@color/surfaceElevated</item>
+        <item name="android:windowBackground">@color/surface</item>
+        <item name="android:statusBarColor">@color/surfaceElevated</item>
+        <item name="android:navigationBarColor">@color/surfaceElevated</item>
+    </style>
+</resources>

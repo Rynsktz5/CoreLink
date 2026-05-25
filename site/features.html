@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreLink Features</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="topbar">
+            <a class="brand" href="./index.html">
+                <img src="./assets/corelink-icon.png" alt="CoreLink icon">
+                <div><span>CoreLink</span><small>Android mesh comms</small></div>
+            </a>
+            <nav class="topnav">
+                <a href="./index.html">Home</a>
+                <a href="./features.html">Features</a>
+                <a href="./docs.html">Docs</a>
+                <a href="./install.html">Install</a>
+                <a href="./privacy.html">Privacy</a>
+                <a href="./roadmap.html">Roadmap</a>
+            </nav>
+            <a class="nav-cta" href="./downloads/corelink-android.apk" download>Download APK</a>
+        </header>
+
+        <main>
+            <section class="page-hero reveal">
+                <span class="eyebrow">Features</span>
+                <h1>Every major CoreLink workflow in one place.</h1>
+                <p>CoreLink is built around a few focused screens instead of one overloaded interface. Each page handles a specific field task clearly.</p>
+                <div class="status-strip">
+                    <div class="status-chip"><span>Chat</span><strong>Peer messaging</strong></div>
+                    <div class="status-chip"><span>Radar</span><strong>Device discovery</strong></div>
+                    <div class="status-chip"><span>Voice</span><strong>STT + notes</strong></div>
+                    <div class="status-chip"><span>Emergency</span><strong>Rapid alerts</strong></div>
+                </div>
+            </section>
+
+            <section class="page-grid">
+                <article class="page-card reveal">
+                    <h2>Mesh Chat</h2>
+                    <p>Android-first message flow with shared Bluetooth session state, quick message composition, and direct access to peer connection tools.</p>
+                    <ul>
+                        <li>Host or join Bluetooth peers</li>
+                        <li>Text communication inside one shared session</li>
+                        <li>Gateway screen for alerts, voice, and call tools</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Device Radar</h2>
+                    <p>Device discovery focused on nearby Bluetooth interaction rather than generic device management.</p>
+                    <ul>
+                        <li>Paired device listing</li>
+                        <li>Nearby discovery scan</li>
+                        <li>Animated radar-style visual feedback</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Voice Lab</h2>
+                    <p>A compact audio utility page for speech-to-text drafting and local voice-note operations.</p>
+                    <ul>
+                        <li>Voice to text</li>
+                        <li>Record and play notes</li>
+                        <li>Send transcripts and notes to connected peers</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Emergency Center</h2>
+                    <p>Fast alert staging with minimal copy and strong action hierarchy for critical scenarios.</p>
+                    <ul>
+                        <li>Medical alert</li>
+                        <li>Shelter and supply alert</li>
+                        <li>Relay support and location share</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Call Deck</h2>
+                    <p>A dedicated session screen for call workflows and future live Bluetooth audio expansion.</p>
+                    <ul>
+                        <li>Host and join call link actions</li>
+                        <li>Session timer layout</li>
+                        <li>Focused palette separate from alert/chat surfaces</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Android First</h2>
+                    <p>The product is designed around Android devices in the field. The website supports installation and documentation, not desktop parity.</p>
+                    <ul>
+                        <li>Phone-first spacing and install flow</li>
+                        <li>Minimal desktop dependency</li>
+                        <li>APK distribution from the website</li>
+                    </ul>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

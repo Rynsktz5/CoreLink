@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreLink Docs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="topbar">
+            <a class="brand" href="./index.html"><img src="./assets/corelink-icon.png" alt="CoreLink icon"><div><span>CoreLink</span><small>Android mesh comms</small></div></a>
+            <nav class="topnav">
+                <a href="./index.html">Home</a><a href="./features.html">Features</a><a href="./docs.html">Docs</a><a href="./install.html">Install</a><a href="./privacy.html">Privacy</a><a href="./roadmap.html">Roadmap</a>
+            </nav>
+            <a class="nav-cta" href="./downloads/corelink-android.apk" download>Download APK</a>
+        </header>
+
+        <main>
+            <section class="page-hero reveal">
+                <span class="eyebrow">Docs</span>
+                <h1>Setup, connect, and operate CoreLink.</h1>
+                <p>Short documentation for Android users, testers, and contributors who need the app working quickly.</p>
+            </section>
+
+            <section class="page-grid">
+                <article class="page-card reveal">
+                    <h2>Install Basics</h2>
+                    <ul>
+                        <li>Download the APK on Android</li>
+                        <li>Allow install from browser or file manager</li>
+                        <li>Open CoreLink after install completes</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Required Permissions</h2>
+                    <ul>
+                        <li>Bluetooth for peer discovery and session connection</li>
+                        <li>Microphone for speech and voice notes</li>
+                        <li>Location only when location sharing is used</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Connection Flow</h2>
+                    <ul>
+                        <li>Open chat</li>
+                        <li>Host a room or join a paired peer</li>
+                        <li>Use the shared session across other feature pages</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Device Discovery</h2>
+                    <ul>
+                        <li>Radar page lists paired devices first</li>
+                        <li>Nearby scan updates the radar list</li>
+                        <li>Choose a paired peer to connect</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Voice Workflow</h2>
+                    <ul>
+                        <li>Use voice-to-text to draft speech</li>
+                        <li>Record voice note locally</li>
+                        <li>Send transcript or note through the connected session</li>
+                    </ul>
+                </article>
+
+                <article class="page-card reveal">
+                    <h2>Troubleshooting</h2>
+                    <ul>
+                        <li>Turn Bluetooth on before connecting</li>
+                        <li>Pair devices in Android settings first</li>
+                        <li>Grant permissions when the app asks</li>
+                    </ul>
+                </article>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

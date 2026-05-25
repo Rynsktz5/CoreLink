@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreLink Roadmap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="topbar">
+            <a class="brand" href="./index.html"><img src="./assets/corelink-icon.png" alt="CoreLink icon"><div><span>CoreLink</span><small>Android mesh comms</small></div></a>
+            <nav class="topnav">
+                <a href="./index.html">Home</a><a href="./features.html">Features</a><a href="./docs.html">Docs</a><a href="./install.html">Install</a><a href="./privacy.html">Privacy</a><a href="./roadmap.html">Roadmap</a>
+            </nav>
+            <a class="nav-cta" href="./downloads/corelink-android.apk" download>Download APK</a>
+        </header>
+
+        <main>
+            <section class="page-hero reveal">
+                <span class="eyebrow">Roadmap</span>
+                <h1>What we can build next.</h1>
+                <p>CoreLink already has a strong Android-first prototype. The roadmap focuses on turning it into a more complete field communication platform.</p>
+            </section>
+
+            <section class="roadmap-grid">
+                <article class="roadmap-card reveal"><h3>Live Bluetooth audio</h3><p>Move from call workflow UI to true real-time audio transport.</p></article>
+                <article class="roadmap-card reveal"><h3>Multi-hop relay</h3><p>Forward alerts and messages across more than one nearby node.</p></article>
+                <article class="roadmap-card reveal"><h3>Group sessions</h3><p>Expand from pair-based communication toward wider local coordination.</p></article>
+                <article class="roadmap-card reveal"><h3>Message persistence</h3><p>Store and recover local communication state more reliably.</p></article>
+                <article class="roadmap-card reveal"><h3>Operational logs</h3><p>Provide mission-friendly event history and export options.</p></article>
+                <article class="roadmap-card reveal"><h3>Security hardening</h3><p>Strengthen session handling and transport safeguards over time.</p></article>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreLink Privacy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="topbar">
+            <a class="brand" href="./index.html"><img src="./assets/corelink-icon.png" alt="CoreLink icon"><div><span>CoreLink</span><small>Android mesh comms</small></div></a>
+            <nav class="topnav">
+                <a href="./index.html">Home</a><a href="./features.html">Features</a><a href="./docs.html">Docs</a><a href="./install.html">Install</a><a href="./privacy.html">Privacy</a><a href="./roadmap.html">Roadmap</a>
+            </nav>
+            <a class="nav-cta" href="./downloads/corelink-android.apk" download>Download APK</a>
+        </header>
+
+        <main>
+            <section class="page-hero reveal">
+                <span class="eyebrow">Privacy</span>
+                <h1>Simple privacy expectations for CoreLink.</h1>
+                <p>CoreLink is focused on Android device-to-device communication. The website mainly distributes builds and explains how the app works.</p>
+            </section>
+
+            <section class="page-grid">
+                <article class="page-card reveal">
+                    <h2>Bluetooth</h2>
+                    <ul>
+                        <li>Used for peer discovery and peer connection</li>
+                        <li>Not used for cloud syncing</li>
+                        <li>Only relevant when Bluetooth features are used</li>
+                    </ul>
+                </article>
+                <article class="page-card reveal">
+                    <h2>Microphone</h2>
+                    <ul>
+                        <li>Used for speech-to-text and voice notes</li>
+                        <li>Not needed for text-only use</li>
+                        <li>Requested only for voice features</li>
+                    </ul>
+                </article>
+                <article class="page-card reveal">
+                    <h2>Location</h2>
+                    <ul>
+                        <li>Used for optional location sharing in emergency workflows</li>
+                        <li>Not required for basic chat</li>
+                        <li>Requested only when the feature is used</li>
+                    </ul>
+                </article>
+                <article class="page-card reveal">
+                    <h2>Website</h2>
+                    <ul>
+                        <li>Provides download and documentation</li>
+                        <li>Does not replace the Android app</li>
+                        <li>Desktop browsing is informational only</li>
+                    </ul>
+                </article>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

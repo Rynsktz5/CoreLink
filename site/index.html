@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreLink | Android Mesh Communication</title>
+    <meta
+        name="description"
+        content="CoreLink is an Android-first mesh communication app built for resilient Bluetooth-based messaging, alerts, voice tools, and emergency coordination."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="topbar">
+            <a class="brand" href="#top">
+                <img src="./assets/corelink-icon.png" alt="CoreLink icon">
+                <div>
+                    <span>CoreLink</span>
+                    <small>Android mesh comms</small>
+                </div>
+            </a>
+
+            <nav class="topnav">
+                <a href="./features.html">Features</a>
+                <a href="#gallery">Screens</a>
+                <a href="./docs.html">Docs</a>
+                <a href="./install.html">Install</a>
+                <a href="./privacy.html">Privacy</a>
+                <a href="./roadmap.html">Roadmap</a>
+            </nav>
+
+            <a class="nav-cta" href="./downloads/corelink-android.apk" download>
+                Download APK
+            </a>
+        </header>
+
+        <main id="top">
+            <section class="hero">
+                <div class="hero-copy reveal">
+                    <span class="eyebrow">Android first. Field ready.</span>
+                    <h1>Reliable communication when normal networks fail.</h1>
+                    <p>
+                        CoreLink is built for Android and focused on Bluetooth mesh messaging,
+                        alerts, voice tools, location sharing, and fast emergency coordination.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a class="primary-btn" href="./downloads/corelink-android.apk" download>
+                            Download for Android
+                        </a>
+                        <a class="secondary-btn" href="#gallery">See the screens</a>
+                    </div>
+
+                    <ul class="hero-points">
+                        <li>Bluetooth peer discovery</li>
+                        <li>Emergency alert workflows</li>
+                        <li>Voice text and voice note tools</li>
+                    </ul>
+
+                    <div class="metric-row">
+                        <div class="metric-pill">
+                            <span>Platform</span>
+                            <strong>Android</strong>
+                        </div>
+                        <div class="metric-pill">
+                            <span>Transport</span>
+                            <strong>Bluetooth</strong>
+                        </div>
+                        <div class="metric-pill">
+                            <span>Focus</span>
+                            <strong>Field use</strong>
+                        </div>
+                    </div>
+
+                    <div class="scroll-cue">
+                        <span>Scroll to trace the mesh</span>
+                        <i></i>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal">
+                    <div class="hero-glow"></div>
+                    <div class="mesh-ribbon ribbon-one"></div>
+                    <div class="mesh-ribbon ribbon-two"></div>
+                    <div class="mesh-stage">
+                        <svg class="mesh-lines" viewBox="0 0 520 520" aria-hidden="true">
+                            <path class="mesh-beam" d="M260 80 L406 156 L414 316 L260 404 L106 316 L114 156 Z"></path>
+                            <path class="mesh-beam soft" d="M260 142 L342 186 L346 276 L260 326 L174 276 L178 186 Z"></path>
+                            <path class="mesh-beam soft" d="M260 80 L260 404"></path>
+                            <path class="mesh-beam soft" d="M114 156 L260 242 L406 156"></path>
+                            <path class="mesh-beam soft" d="M106 316 L260 242 L414 316"></path>
+                        </svg>
+
+                        <span class="mesh-node node-top"></span>
+                        <span class="mesh-node node-right-top"></span>
+                        <span class="mesh-node node-right-bottom"></span>
+                        <span class="mesh-node node-bottom"></span>
+                        <span class="mesh-node node-left-bottom"></span>
+                        <span class="mesh-node node-left-top"></span>
+                        <span class="mesh-node node-core"></span>
+                    </div>
+                    <div class="device-frame">
+                        <div class="device-card orbit-card card-a">
+                            <span>Status</span>
+                            <strong>Peer linked</strong>
+                        </div>
+                        <div class="device-card orbit-card card-b">
+                            <span>Alert</span>
+                            <strong>Relay staged</strong>
+                        </div>
+                        <div class="device-card orbit-card card-c">
+                            <span>Voice</span>
+                            <strong>Text ready</strong>
+                        </div>
+                        <img src="./assets/corelink-icon.png" alt="CoreLink app artwork">
+                    </div>
+                </div>
+            </section>
+
+            <section class="network-scene reveal">
+                <div class="section-copy">
+                    <span class="eyebrow">Live Mesh Visual</span>
+                    <h2>A network field built around peers, relays, and motion.</h2>
+                    <p>
+                        This visual layer represents CoreLink as a live mesh: peers joining,
+                        links stabilizing, and emergency traffic moving through the graph.
+                    </p>
+                </div>
+
+                <div class="network-panel">
+                    <div class="network-grid">
+                        <span class="network-link link-a"></span>
+                        <span class="network-link link-b"></span>
+                        <span class="network-link link-c"></span>
+                        <span class="network-link link-d"></span>
+                        <span class="network-link link-e"></span>
+                        <span class="network-link link-f"></span>
+
+                        <div class="network-peer peer-anchor">
+                            <b>Core</b>
+                            <small>Relay</small>
+                        </div>
+                        <div class="network-peer peer-one">
+                            <b>A1</b>
+                            <small>Voice</small>
+                        </div>
+                        <div class="network-peer peer-two">
+                            <b>B4</b>
+                            <small>Alert</small>
+                        </div>
+                        <div class="network-peer peer-three">
+                            <b>C2</b>
+                            <small>Location</small>
+                        </div>
+                        <div class="network-peer peer-four">
+                            <b>D9</b>
+                            <small>Chat</small>
+                        </div>
+                        <div class="network-peer peer-five">
+                            <b>E7</b>
+                            <small>Call</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="feature-grid" id="features">
+                <article class="feature-card reveal">
+                    <span class="feature-tag">Chat</span>
+                    <h2>Mesh Chat</h2>
+                    <p>Send peer-to-peer messages through Bluetooth connections with a clean Android-first flow.</p>
+                </article>
+
+                <article class="feature-card reveal radar-card">
+                    <span class="feature-tag">Radar</span>
+                    <h2>Scan Nearby Devices</h2>
+                    <p>Detect paired and nearby Bluetooth devices with a focused, animated discovery screen.</p>
+                    <div class="radar-preview">
+                        <div class="radar-ring ring-one"></div>
+                        <div class="radar-ring ring-two"></div>
+                        <div class="radar-core"></div>
+                    </div>
+                </article>
+
+                <article class="feature-card reveal">
+                    <span class="feature-tag">Voice</span>
+                    <h2>Voice Lab</h2>
+                    <p>Turn speech into text, record voice notes, preview them locally, and send tools through an active session.</p>
+                </article>
+
+                <article class="feature-card reveal alert-card">
+                    <span class="feature-tag">Emergency</span>
+                    <h2>Emergency Center</h2>
+                    <p>Stage medical, shelter, relay, and location-based help requests with minimal operator friction.</p>
+                </article>
+
+                <article class="feature-card reveal call-card">
+                    <span class="feature-tag">Call Deck</span>
+                    <h2>Call Interface</h2>
+                    <p>A dedicated session screen for live-call workflow setup and future audio transport expansion.</p>
+                </article>
+
+                <article class="feature-card reveal">
+                    <span class="feature-tag">Android</span>
+                    <h2>Made for Phones</h2>
+                    <p>The website is intentionally lightweight. The real product experience is designed around Android devices in the field.</p>
+                </article>
+            </section>
+
+            <section class="gallery" id="gallery">
+                <div class="section-copy reveal">
+                    <span class="eyebrow">App Screens</span>
+                    <h2>The real app flow, screen by screen.</h2>
+                    <p>
+                        These sections mirror the screens you shared: the home hub, chat page, voice lab,
+                        emergency center, and call deck.
+                    </p>
+                </div>
+
+                <div class="gallery-grid">
+                    <article class="phone-card reveal">
+                        <div class="phone-shot shot-home">
+                            <div class="phone-header">
+                                <strong>CoreLink</strong>
+                                <span>Feature Deck</span>
+                            </div>
+                            <div class="phone-panel large">
+                                <b>Feature Deck</b>
+                                <small>Mesh chat, device radar, voice tools, emergency actions, and call deck.</small>
+                            </div>
+                            <div class="phone-button active">Open Mesh Chat</div>
+                            <div class="phone-button">Scan Nearby Devices</div>
+                            <div class="phone-button">Open Voice Lab</div>
+                            <div class="phone-button">Open Emergency Center</div>
+                            <div class="phone-button">Open Call Deck</div>
+                        </div>
+                        <h3>Home hub</h3>
+                        <p>One Android-first start screen with clear feature entry points.</p>
+                    </article>
+
+                    <article class="phone-card reveal">
+                        <div class="phone-shot shot-chat">
+                            <div class="phone-header">
+                                <strong>CoreLink Chat</strong>
+                                <span>Open and ready. No device connected yet.</span>
+                            </div>
+                            <div class="icon-row">
+                                <i></i><i></i><i></i><i class="danger"></i>
+                            </div>
+                            <div class="message-bubble">
+                                Welcome to CoreLink. Use the Bluetooth button to host or join a peer.
+                            </div>
+                            <div class="composer-row">
+                                <div class="composer-field">Type a message</div>
+                                <div class="composer-send"></div>
+                            </div>
+                        </div>
+                        <h3>Mesh chat</h3>
+                        <p>Shared-session messaging with direct access to connection, voice, alert, and call tools.</p>
+                    </article>
+
+                    <article class="phone-card reveal">
+                        <div class="phone-shot shot-voice">
+                            <div class="phone-header">
+                                <strong>Voice Lab</strong>
+                                <span>Microphone idle.</span>
+                            </div>
+                            <div class="pulse-panel">
+                                <div class="pulse-ring"></div>
+                                <small>Capture quick notes, playback drafts, and dictate text.</small>
+                            </div>
+                            <div class="phone-button active">Voice to Text</div>
+                            <div class="phone-button">Record Voice Note</div>
+                            <div class="phone-button">Play Saved Note</div>
+                            <div class="phone-button">Send Voice Text</div>
+                            <div class="phone-button">Send Voice Note</div>
+                            <div class="phone-note">Your dictated text will appear here.</div>
+                        </div>
+                        <h3>Voice tools</h3>
+                        <p>Speech-to-text, voice note recording, playback, and send controls in one page.</p>
+                    </article>
+
+                    <article class="phone-card reveal">
+                        <div class="phone-shot shot-emergency">
+                            <div class="phone-header">
+                                <strong>Emergency Center</strong>
+                                <span>Pick a prebuilt alert to stage a rapid response.</span>
+                            </div>
+                            <div class="alert-panel">
+                                <b>Rapid Alert Console</b>
+                                <small>Medical, shelter, relay, and location support.</small>
+                            </div>
+                            <div class="phone-button alert-main">Send Medical Support Alert</div>
+                            <div class="phone-button">Send Shelter and Supply Alert</div>
+                            <div class="phone-button">Send Mesh Relay Alert</div>
+                            <div class="phone-button">Share Location</div>
+                            <div class="phone-note">Location not shared yet.</div>
+                        </div>
+                        <h3>Emergency center</h3>
+                        <p>Fast alert staging with structured actions and visible location sharing state.</p>
+                    </article>
+
+                    <article class="phone-card reveal">
+                        <div class="phone-shot shot-call">
+                            <div class="phone-header">
+                                <strong>Call Deck</strong>
+                                <span>Call link idle. Choose host or join.</span>
+                            </div>
+                            <div class="call-panel">
+                                <div class="pulse-ring warm"></div>
+                                <b>00:00</b>
+                            </div>
+                            <div class="phone-button active">Host Call Link</div>
+                            <div class="phone-button">Join Call Link</div>
+                            <div class="phone-button">End Call Session</div>
+                        </div>
+                        <h3>Call deck</h3>
+                        <p>A dedicated call session interface with calmer colors and a focused workflow.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="experience" id="experience">
+                <div class="section-copy reveal">
+                    <span class="eyebrow">Product Experience</span>
+                    <h2>Focused on the moments that matter.</h2>
+                    <p>
+                        The website mirrors the app's structure so users understand the product quickly:
+                        discover peers, connect, communicate, coordinate, and recover fast.
+                    </p>
+                </div>
+
+                <div class="timeline-grid">
+                    <article class="timeline-card reveal">
+                        <span class="timeline-step">01</span>
+                        <h3>Discover</h3>
+                        <p>Open Device Radar to inspect paired devices and nearby Bluetooth nodes.</p>
+                    </article>
+
+                    <article class="timeline-card reveal">
+                        <span class="timeline-step">02</span>
+                        <h3>Connect</h3>
+                        <p>Host a Bluetooth room or join a paired peer from inside chat without leaving the Android flow.</p>
+                    </article>
+
+                    <article class="timeline-card reveal">
+                        <span class="timeline-step">03</span>
+                        <h3>Communicate</h3>
+                        <p>Use text, voice text, and voice notes through a shared Bluetooth session.</p>
+                    </article>
+
+                    <article class="timeline-card reveal">
+                        <span class="timeline-step">04</span>
+                        <h3>Respond</h3>
+                        <p>Send structured alerts and location-sharing details from the emergency center.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="docs" id="docs">
+                <div class="docs-copy reveal">
+                    <span class="eyebrow">Documentation</span>
+                    <h2>Simple docs. Clear actions.</h2>
+                    <p>
+                        The site focuses on Android users first: what the app does, how to install it,
+                        and what each feature page is for.
+                    </p>
+                </div>
+
+                <div class="docs-panels">
+                    <article class="doc-card reveal">
+                        <h3>Install</h3>
+                        <ul>
+                            <li>Download the APK on Android</li>
+                            <li>Allow install from browser or file manager</li>
+                            <li>Open CoreLink and grant Bluetooth, voice, and location permissions</li>
+                        </ul>
+                    </article>
+
+                    <article class="doc-card reveal">
+                        <h3>Connection Flow</h3>
+                        <ul>
+                            <li>Host a Bluetooth room or join a paired peer</li>
+                            <li>Use Device Radar to inspect nearby nodes</li>
+                            <li>Use chat, voice tools, and emergency actions through the same session</li>
+                        </ul>
+                    </article>
+
+                    <article class="doc-card reveal">
+                        <h3>Operational Notes</h3>
+                        <ul>
+                            <li>Android is the primary platform</li>
+                            <li>Desktop web is informational only</li>
+                            <li>Direct site installs still use Android’s normal APK installer prompt</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="install-steps">
+                    <article class="step-card reveal">
+                        <span class="timeline-step">Step 1</span>
+                        <h3>Download</h3>
+                        <p>Open the site on Android and tap the APK download button.</p>
+                    </article>
+
+                    <article class="step-card reveal">
+                        <span class="timeline-step">Step 2</span>
+                        <h3>Allow install</h3>
+                        <p>Approve install from the browser or file manager if Android asks.</p>
+                    </article>
+
+                    <article class="step-card reveal">
+                        <span class="timeline-step">Step 3</span>
+                        <h3>Grant permissions</h3>
+                        <p>Allow Bluetooth, microphone, and location only when the app requests them.</p>
+                    </article>
+                </div>
+
+                <div class="docs-detail-grid">
+                    <article class="detail-card reveal">
+                        <span class="feature-tag">Architecture</span>
+                        <h3>Shared session model</h3>
+                        <p>Chat, voice tools, emergency actions, and device discovery rely on one active Bluetooth session layer.</p>
+                    </article>
+
+                    <article class="detail-card reveal">
+                        <span class="feature-tag">Permissions</span>
+                        <h3>Minimal permission set</h3>
+                        <p>Bluetooth, microphone, and optional location access are requested only where they matter.</p>
+                    </article>
+
+                    <article class="detail-card reveal">
+                        <span class="feature-tag">Web role</span>
+                        <h3>Support layer</h3>
+                        <p>This site explains the product and distributes Android builds. The app remains the primary experience.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="roadmap">
+                <div class="section-copy reveal">
+                    <span class="eyebrow">Roadmap</span>
+                    <h2>What comes next for CoreLink.</h2>
+                    <p>Near-term upgrades to move from strong prototype toward a more complete field communication tool.</p>
+                </div>
+
+                <div class="roadmap-grid">
+                    <article class="roadmap-card reveal">
+                        <h3>Live Bluetooth audio</h3>
+                        <p>Move from call workflow UI to true live audio transport.</p>
+                    </article>
+
+                    <article class="roadmap-card reveal">
+                        <h3>Multi-hop relay</h3>
+                        <p>Forward alerts and messages across more than one nearby node.</p>
+                    </article>
+
+                    <article class="roadmap-card reveal">
+                        <h3>Session hardening</h3>
+                        <p>Add stronger message persistence and clearer reconnection behavior.</p>
+                    </article>
+
+                    <article class="roadmap-card reveal">
+                        <h3>Operational logs</h3>
+                        <p>Surface mission-friendly activity history and export options.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="install-panel reveal" id="install">
+                <div>
+                    <span class="eyebrow">Android install</span>
+                    <h2>Download the app and install it on Android.</h2>
+                    <p>
+                        Tapping the button on an Android phone downloads the APK and opens the normal
+                        Android install flow. Browsers cannot silently install apps by themselves.
+                    </p>
+                </div>
+
+                <div class="install-actions">
+                    <a class="primary-btn" href="./downloads/corelink-android.apk" download>
+                        Download APK
+                    </a>
+                    <span class="install-note">APK path: <code>site/downloads/corelink-android.apk</code></span>
+                </div>
+            </section>
+
+            <section class="faq">
+                <div class="section-copy reveal">
+                    <span class="eyebrow">FAQ</span>
+                    <h2>Quick answers for operators and testers.</h2>
+                </div>
+
+                <div class="faq-grid">
+                    <article class="faq-card reveal">
+                        <h3>Does the website install the app directly?</h3>
+                        <p>No. It downloads the APK and then Android handles the install prompt.</p>
+                    </article>
+
+                    <article class="faq-card reveal">
+                        <h3>Why focus on Android?</h3>
+                        <p>CoreLink is built for phone-based field communication. The web layer is mainly for distribution and documentation.</p>
+                    </article>
+
+                    <article class="faq-card reveal">
+                        <h3>Can the site work on desktop?</h3>
+                        <p>Yes for reading docs and downloading files, but the actual product is designed around Android devices.</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer reveal">
+            <div>
+                <strong>CoreLink</strong>
+                <p>Android-first mesh communication for low-connectivity and emergency environments.</p>
+            </div>
+            <div class="footer-actions">
+                <a class="secondary-btn" href="./features.html">Explore Features</a>
+                <a class="primary-btn" href="./downloads/corelink-android.apk" download>Get the APK</a>
+            </div>
+        </footer>
+    </div>
+
+    <a class="floating-install" href="./downloads/corelink-android.apk" download>
+        Install on Android
+    </a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>
