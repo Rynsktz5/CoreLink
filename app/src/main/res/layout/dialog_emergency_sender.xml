@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="?attr/colorSurface"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SOS Emergency Trigger"
+        android:textColor="?attr/colorError"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Select category and hold down the SOS button for 3 seconds to broadcast a distress signal."
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="13sp"
+        android:gravity="center" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/categoryChipGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:singleSelection="true"
+        app:selectionRequired="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMedical"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medical"
+            android:checked="true" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipShelter"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shelter" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRelay"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Relay" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipGeneral"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="General" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <FrameLayout
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/sosProgress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:indicatorSize="150dp"
+            app:trackThickness="10dp"
+            app:indicatorColor="?attr/colorError"
+            app:trackColor="?attr/colorSurfaceVariant"
+            android:max="3000"
+            android:progress="0" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/sosButton"
+            style="?attr/materialCardViewFilledStyle"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="55dp"
+            app:cardBackgroundColor="?attr/colorError"
+            app:strokeWidth="0dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/sosButtonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="HOLD\nSOS"
+                android:gravity="center"
+                android:textColor="?attr/colorOnError"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/sosTimerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ready"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="12sp"
+        android:fontFamily="monospace" />
+
+</LinearLayout>

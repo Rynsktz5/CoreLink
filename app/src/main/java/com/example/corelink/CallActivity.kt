@@ -10,24 +10,28 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.ImageButton
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
 
 class CallActivity : AppCompatActivity() {
 
+    private lateinit var setupContainer: View
+    private lateinit var callContainer: View
     private lateinit var callStatus: TextView
     private lateinit var callTimer: TextView
-    private lateinit var callPulse: android.view.View
+    private lateinit var callPeerName: TextView
+    private lateinit var callPulse1: View
+    private lateinit var callPulse2: View
 
     private val handler = Handler(Looper.getMainLooper())
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private var callStartedAt = 0L
-    private var pulseAnimator: ObjectAnimator? = null
+    private val pulseAnimators = mutableListOf<ObjectAnimator>()
 
     private val callStateListener: (CallSessionState) -> Unit = { state ->
         runOnUiThread { renderState(state) }
@@ -62,24 +66,33 @@ class CallActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call)
 
+        setupContainer = findViewById(R.id.setupContainer)
+        callContainer = findViewById(R.id.callContainer)
         callStatus = findViewById(R.id.callStatus)
         callTimer = findViewById(R.id.callTimer)
-        callPulse = findViewById(R.id.callPulse)
+        callPeerName = findViewById(R.id.callPeerName)
+        callPulse1 = findViewById(R.id.callPulse)
+        callPulse2 = findViewById(R.id.callPulse2)
 
-        findViewById<ImageButton>(R.id.themeToggleButton).setOnClickListener {
+        setupContainer.visibility = View.VISIBLE
+        setupContainer.alpha = 1f
+        callContainer.visibility = View.GONE
+        callContainer.alpha = 0f
+
+        findViewById<View>(R.id.themeToggleButton).setOnClickListener {
             ThemePrefs.toggle(this)
             recreate()
         }
 
-        findViewById<MaterialButton>(R.id.hostCallButton).setOnClickListener {
+        findViewById<View>(R.id.hostCallButton).setOnClickListener {
             startHostingCall()
         }
 
-        findViewById<MaterialButton>(R.id.joinCallButton).setOnClickListener {
+        findViewById<View>(R.id.joinCallButton).setOnClickListener {
             showJoinDevicePicker()
         }
 
-        findViewById<MaterialButton>(R.id.endCallButton).setOnClickListener {
+        findViewById<View>(R.id.endCallButton).setOnClickListener {
             CoreLinkCallSession.end()
         }
 
@@ -89,7 +102,7 @@ class CallActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(timerRunnable)
-        pulseAnimator?.cancel()
+        stopPulse()
         CoreLinkCallSession.removeStateListener(callStateListener)
     }
 
@@ -153,27 +166,34 @@ class CallActivity : AppCompatActivity() {
     private fun renderState(state: CallSessionState) {
         when (state.phase) {
             CallPhase.IDLE -> {
+                crossfade(setupContainer, callContainer)
                 callStatus.text = getString(R.string.call_idle_status)
                 resetTimer()
                 stopPulse()
             }
 
             CallPhase.HOSTING -> {
+                crossfade(callContainer, setupContainer)
+                callPeerName.text = "Discoverable Mode"
                 callStatus.text = getString(R.string.call_hosting_status)
                 resetTimer()
                 startPulse()
             }
 
             CallPhase.JOINING -> {
+                crossfade(callContainer, setupContainer)
                 val peer = state.peerName ?: getString(R.string.unknown_device)
+                callPeerName.text = peer
                 callStatus.text = getString(R.string.call_joining_device_status, peer)
                 resetTimer()
                 startPulse()
             }
 
             CallPhase.ACTIVE -> {
+                crossfade(callContainer, setupContainer)
                 val peer = state.peerName ?: getString(R.string.call_connected_peer)
-                callStatus.text = getString(R.string.call_active_status, peer)
+                callPeerName.text = peer
+                callStatus.text = "CALL IN PROGRESS"
                 callStartedAt = state.startedAt ?: System.currentTimeMillis()
                 handler.removeCallbacks(timerRunnable)
                 handler.post(timerRunnable)
@@ -182,25 +202,94 @@ class CallActivity : AppCompatActivity() {
         }
     }
 
+    private fun crossfade(showView: View, hideView: View) {
+        if (showView.visibility == View.VISIBLE && showView.alpha == 1f) {
+            hideView.visibility = View.GONE
+            hideView.alpha = 0f
+            return
+        }
+
+        // Cancel running animations to prevent glitches
+        showView.animate().cancel()
+        hideView.animate().cancel()
+
+        showView.alpha = 0f
+        showView.visibility = View.VISIBLE
+
+        showView.animate()
+            .alpha(1f)
+            .setDuration(400)
+            .setListener(null)
+
+        hideView.animate()
+            .alpha(0f)
+            .setDuration(400)
+            .withEndAction {
+                hideView.visibility = View.GONE
+            }
+    }
+
     private fun resetTimer() {
         callTimer.text = "00:00"
         handler.removeCallbacks(timerRunnable)
     }
 
     private fun startPulse() {
-        if (pulseAnimator?.isRunning == true) return
-        pulseAnimator = ObjectAnimator.ofFloat(callPulse, "alpha", 0.35f, 1f).apply {
-            duration = 800
-            repeatMode = ObjectAnimator.REVERSE
+        if (pulseAnimators.any { it.isRunning }) return
+        
+        // Pulse 1
+        pulseAnimators += ObjectAnimator.ofFloat(callPulse1, "scaleX", 1f, 2.5f).apply {
+            duration = 2000
             repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+        pulseAnimators += ObjectAnimator.ofFloat(callPulse1, "scaleY", 1f, 2.5f).apply {
+            duration = 2000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+        pulseAnimators += ObjectAnimator.ofFloat(callPulse1, "alpha", 1f, 0f).apply {
+            duration = 2000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+
+        // Pulse 2 (delayed by 1000ms)
+        pulseAnimators += ObjectAnimator.ofFloat(callPulse2, "scaleX", 1f, 2.5f).apply {
+            duration = 2000
+            startDelay = 1000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+        pulseAnimators += ObjectAnimator.ofFloat(callPulse2, "scaleY", 1f, 2.5f).apply {
+            duration = 2000
+            startDelay = 1000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
+        pulseAnimators += ObjectAnimator.ofFloat(callPulse2, "alpha", 1f, 0f).apply {
+            duration = 2000
+            startDelay = 1000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
             start()
         }
     }
 
     private fun stopPulse() {
-        pulseAnimator?.cancel()
-        callPulse.alpha = 1f
-        pulseAnimator = null
+        pulseAnimators.forEach { it.cancel() }
+        pulseAnimators.clear()
+        callPulse1.scaleX = 1f
+        callPulse1.scaleY = 1f
+        callPulse1.alpha = 0f
+        callPulse2.scaleX = 1f
+        callPulse2.scaleY = 1f
+        callPulse2.alpha = 0f
     }
 
     private fun ensureCallPermissions(): Boolean {

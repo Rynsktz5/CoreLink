@@ -140,16 +140,17 @@ class AudioCallService(private val context: Context) {
             }
         }
 
+        val packetSize = 640 // 20ms of 16-bit mono voice audio at 16kHz
+
+        // Recording Thread
         Thread {
             Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO)
-            val bufferSize = max(
-                AudioRecord.getMinBufferSize(
-                    SAMPLE_RATE,
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT
-                ),
-                2048
+            val minBufferSize = AudioRecord.getMinBufferSize(
+                SAMPLE_RATE,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT
             )
+            val bufferSize = max(minBufferSize, 2048)
 
             val recorder = AudioRecord(
                 MediaRecorder.AudioSource.MIC,
@@ -165,13 +166,32 @@ class AudioCallService(private val context: Context) {
                 return@Thread
             }
 
-            val buffer = ByteArray(bufferSize)
+            val aec = if (android.media.audiofx.AcousticEchoCanceler.isAvailable()) {
+                android.media.audiofx.AcousticEchoCanceler.create(recorder.audioSessionId)?.apply {
+                    enabled = true
+                }
+            } else null
+
+            val ns = if (android.media.audiofx.NoiseSuppressor.isAvailable()) {
+                android.media.audiofx.NoiseSuppressor.create(recorder.audioSessionId)?.apply {
+                    enabled = true
+                }
+            } else null
+
+            val buffer = ByteArray(packetSize)
             try {
                 recorder.startRecording()
                 while (active.get() && socket?.isConnected == true) {
-                    val count = recorder.read(buffer, 0, buffer.size)
-                    if (count > 0) {
-                        sink.write(buffer, 0, count)
+                    var bytesRead = 0
+                    while (bytesRead < packetSize && active.get() && socket?.isConnected == true) {
+                        val count = recorder.read(buffer, bytesRead, packetSize - bytesRead)
+                        if (count < 0) {
+                            throw java.io.IOException("AudioRecord read error: $count")
+                        }
+                        bytesRead += count
+                    }
+                    if (bytesRead == packetSize) {
+                        sink.write(buffer, 0, packetSize)
                         sink.flush()
                     }
                 }
@@ -180,19 +200,20 @@ class AudioCallService(private val context: Context) {
             } finally {
                 runCatching { recorder.stop() }
                 recorder.release()
+                aec?.release()
+                ns?.release()
             }
         }.start()
 
+        // Playback Thread
         Thread {
             Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO)
-            val bufferSize = max(
-                AudioTrack.getMinBufferSize(
-                    SAMPLE_RATE,
-                    AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT
-                ),
-                2048
+            val minBufferSize = AudioTrack.getMinBufferSize(
+                SAMPLE_RATE,
+                AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT
             )
+            val bufferSize = max(minBufferSize, 2048)
 
             val track = AudioTrack(
                 AudioAttributes.Builder()
@@ -215,13 +236,12 @@ class AudioCallService(private val context: Context) {
                 return@Thread
             }
 
-            val buffer = ByteArray(bufferSize)
+            val buffer = ByteArray(packetSize)
             try {
                 track.play()
                 while (active.get() && socket?.isConnected == true) {
-                    val count = source.read(buffer)
-                    if (count <= 0) break
-                    track.write(buffer, 0, count)
+                    readFully(source, buffer, packetSize)
+                    track.write(buffer, 0, packetSize)
                 }
             } catch (_: Exception) {
                 if (active.get()) handleDisconnect()
@@ -231,6 +251,17 @@ class AudioCallService(private val context: Context) {
                 if (active.get()) handleDisconnect()
             }
         }.start()
+    }
+
+    private fun readFully(inputStream: java.io.InputStream, buffer: ByteArray, length: Int) {
+        var bytesRead = 0
+        while (bytesRead < length) {
+            val result = inputStream.read(buffer, bytesRead, length - bytesRead)
+            if (result == -1) {
+                throw java.io.IOException("EOF reached")
+            }
+            bytesRead += result
+        }
     }
 
     fun disconnect() {

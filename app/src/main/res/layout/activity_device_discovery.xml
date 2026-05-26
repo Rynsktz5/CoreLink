@@ -4,10 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
+    android:background="?attr/colorSurface"
     android:orientation="vertical"
     android:padding="18dp">
 
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/device_radar_title"
-                android:textColor="@color/textPrimary"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -33,47 +34,82 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:fontFamily="monospace"
                 android:text="@string/scan_status_idle"
-                android:textColor="@color/textSecondary"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/themeToggleButton"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@drawable/icon_btn_bg"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:contentDescription="@string/toggle_theme"
-            android:padding="10dp"
-            android:src="@android:drawable/ic_menu_manage"
-            android:tint="@color/textPrimary" />
+            app:icon="@android:drawable/ic_menu_manage"
+            app:iconTint="?attr/colorOnSurface" />
     </LinearLayout>
 
-    <LinearLayout
+    <!-- RADAR VISUAL -->
+    <com.google.android.material.card.MaterialCardView
+        style="?attr/materialCardViewFilledStyle"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="220dp"
         android:layout_marginTop="18dp"
-        android:background="@drawable/input_bg"
-        android:gravity="center"
-        android:orientation="vertical">
+        app:cardCornerRadius="24dp">
 
-        <View
-            android:id="@+id/scanPulse"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="@drawable/scan_pulse_bg" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="monospace"
-            android:text="@string/device_radar_subtitle"
-            android:textColor="@color/textSecondary"
-            android:textSize="14sp" />
-    </LinearLayout>
+            <!-- PULSE 1 -->
+            <View
+                android:id="@+id/scanPulse1"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:alpha="0"
+                android:background="@drawable/scan_pulse_bg" />
 
+            <!-- PULSE 2 -->
+            <View
+                android:id="@+id/scanPulse2"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:alpha="0"
+                android:background="@drawable/scan_pulse_bg" />
+
+            <!-- CENTER RADAR ICON -->
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                app:cardBackgroundColor="?attr/colorPrimary"
+                app:cardCornerRadius="36dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                app:strokeWidth="0dp"
+                android:elevation="6dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/stat_sys_data_bluetooth"
+                    app:tint="?attr/colorOnPrimary" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:text="@string/device_radar_subtitle"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="13sp" />
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- SCAN ACTION BUTTON -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/scanButton"
         android:layout_width="match_parent"
@@ -81,18 +117,32 @@
         android:layout_marginTop="16dp"
         android:text="@string/start_scan"
         android:textAllCaps="false"
-        app:backgroundTint="@color/accent"
-        app:cornerRadius="18dp"
+        app:cornerRadius="24dp"
         app:icon="@android:drawable/stat_notify_sync"
         app:iconGravity="textStart"
-        app:iconPadding="10dp"
-        app:iconTint="@android:color/white" />
+        app:iconPadding="10dp" />
 
+    <!-- DEVICE LIST -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/deviceRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="14dp"
         android:layout_weight="1" />
+
+    <!-- SYSTEM PAIR BUTTON -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/systemPairButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Pair Unpaired Device (System)"
+        android:textAllCaps="false"
+        app:cornerRadius="12dp"
+        app:icon="@android:drawable/ic_menu_add"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp" />
 
 </LinearLayout>

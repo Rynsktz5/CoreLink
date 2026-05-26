@@ -1,125 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
-    android:orientation="vertical"
-    android:padding="18dp">
+    android:background="?attr/colorSurface">
 
-    <LinearLayout
+    <!-- 1. SETUP CONTAINER (Visible when IDLE) -->
+    <ScrollView
+        android:id="@+id/setupContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/call_deck_title"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Offline Voice Connection Hub"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/themeToggleButton"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/toggle_theme"
+                    app:icon="@android:drawable/ic_menu_manage"
+                    app:iconTint="?attr/colorOnSurface" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/call_deck_subtitle"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1" />
+
+            <!-- Card 1: Host Voice Call -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/hostCallButton"
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@android:drawable/ic_menu_call"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/host_call"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Make your phone discoverable to accept incoming voice calls from nearby nodes."
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 2: Join Voice Call -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/joinCallButton"
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@android:drawable/stat_sys_data_bluetooth"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/join_call"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Select a paired friend's node from the list to start a low-latency voice call."
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 2. FULL SCREEN CALLING SCREEN OVERLAY (Visible when HOSTING, JOINING, ACTIVE) -->
+    <RelativeLayout
+        android:id="@+id/callContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurfaceContainerHigh"
+        android:visibility="gone"
+        android:padding="24dp">
+
+        <!-- Top Header Info -->
+        <TextView
+            android:id="@+id/callHeaderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:text="CORELINK VOICE"
+            android:letterSpacing="0.2"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/callStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/callHeaderTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="CONNECTING..."
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="16sp" />
+
+        <!-- Animation/Avatar Core Area -->
+        <FrameLayout
+            android:id="@+id/avatarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:layout_centerInParent="true">
+
+            <!-- PULSE 1 (Wave) -->
+            <View
+                android:id="@+id/callPulse"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:background="@drawable/scan_pulse_bg"
+                android:alpha="0" />
+
+            <!-- PULSE 2 (Staggered Wave) -->
+            <View
+                android:id="@+id/callPulse2"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:background="@drawable/scan_pulse_bg"
+                android:alpha="0" />
+
+            <!-- Immersive Circular Caller Avatar -->
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                app:cardBackgroundColor="?attr/colorPrimary"
+                app:cardCornerRadius="72dp"
+                android:layout_width="144dp"
+                android:layout_height="144dp"
+                android:layout_gravity="center"
+                app:strokeWidth="0dp"
+                android:elevation="8dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_call"
+                    app:tint="?attr/colorOnPrimary" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </FrameLayout>
+
+        <!-- Peer info and call timer -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/endCallButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="48dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/callPeerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/call_deck_title"
-                android:textColor="@color/textPrimary"
-                android:textSize="24sp"
+                android:text="Nearby Peer"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/callStatus"
+                android:id="@+id/callTimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/call_idle_status"
-                android:textColor="@color/textSecondary"
-                android:textSize="13sp" />
+                android:layout_marginTop="8dp"
+                android:text="00:00"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="20sp" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/themeToggleButton"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@drawable/icon_btn_bg"
-            android:contentDescription="@string/toggle_theme"
-            android:padding="10dp"
-            android:src="@android:drawable/ic_menu_manage"
-            android:tint="@color/textPrimary" />
-    </LinearLayout>
+        <!-- Red Circular Hangup Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/endCallButton"
+            style="?attr/materialIconButtonFilledStyle"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="36dp"
+            app:backgroundTint="?attr/colorError"
+            app:icon="@android:drawable/ic_menu_close_clear_cancel"
+            app:iconSize="32dp"
+            app:iconTint="?attr/colorOnError"
+            app:iconPadding="0dp"
+            android:contentDescription="@string/end_call"
+            android:elevation="6dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="190dp"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/call_panel_bg"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <View
-            android:id="@+id/callPulse"
-            android:layout_width="82dp"
-            android:layout_height="82dp"
-            android:background="@drawable/voice_pulse_bg" />
-
-        <TextView
-            android:id="@+id/callTimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="00:00"
-            android:textColor="@color/textPrimary"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/call_deck_subtitle"
-        android:textColor="@color/textSecondary"
-        android:textSize="14sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/hostCallButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="@string/host_call"
-        android:textAllCaps="false"
-        app:backgroundTint="@color/accent"
-        app:cornerRadius="18dp"
-        app:icon="@android:drawable/ic_menu_call"
-        app:iconGravity="textStart"
-        app:iconPadding="10dp"
-        app:iconTint="@android:color/white" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/joinCallButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/join_call"
-        android:textAllCaps="false"
-        app:cornerRadius="18dp"
-        app:icon="@android:drawable/stat_sys_data_bluetooth"
-        app:iconGravity="textStart"
-        app:iconPadding="10dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/endCallButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/end_call"
-        android:textAllCaps="false"
-        app:cornerRadius="18dp"
-        app:icon="@android:drawable/ic_menu_close_clear_cancel"
-        app:iconGravity="textStart"
-        app:iconPadding="10dp" />
-
-</LinearLayout>
+    </RelativeLayout>
+</FrameLayout>
